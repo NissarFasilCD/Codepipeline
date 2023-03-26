@@ -6,7 +6,7 @@ phases:
       docker: 18
   build:
     commands:
-      - $(aws ecr get-login --no-include-email --region <your-ecr-region>)
-      - docker build -t <your-image-name> .
-      - docker tag <your-image-name>:latest <your-ecr-repo-url>/<your-image-name>:latest
-      - docker push <your-ecr-repo-url>/<your-image-name>:latest
+      - $(aws ecr get-login --no-include-email --region <ap-southeast-2>)
+      - docker build -t <codepipeline-sample> .
+      - docker tag <codepipeline-sample>:latest <754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline>/<codepipeline-sample>:latest
+      - docker push <754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline>/<codepipeline-sample>:latest
