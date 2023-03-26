@@ -6,7 +6,7 @@ phases:
       - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
   build:
     commands:
-      - docker build -t codepipeline:Latest .
+      - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline:latest
   post_build:
     commands:
