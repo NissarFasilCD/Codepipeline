@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+  build:
+    commands:
+      - $(aws ecr get-login --no-include-email --region <your-ecr-region>)
+      - docker build -t <your-image-name> .
+      - docker tag <your-image-name>:latest <your-ecr-repo-url>/<your-image-name>:latest
+      - docker push <your-ecr-repo-url>/<your-image-name>:latest
