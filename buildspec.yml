@@ -19,12 +19,11 @@ phases:
       - aws configure set default.region $AWS_REGION
       - aws configure set default.output json
       - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
-      - sh ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_NAME} | sh
       - pip install ecs-deploy
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
     commands:
       - docker push 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
-      - sh ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${CODEBUILD_BUILD_ID} ${AWS_PROFILE} | sh
+      - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:$CODEBUILD_BUILD_ID  --timeout 600 --enable-rollback --max-definitions 3 | sh
      
