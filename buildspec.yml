@@ -15,11 +15,9 @@ phases:
   build:
     commands:
       - docker build -t codepipeline -f Dockerfile .
-      - docker tag codepipeline:latest ${IMAGE_NAME}:${CODEBUILD_BUILD_ID}
-      - docker tag ${IMAGE_NAME}:${CODEBUILD_BUILD_ID ${IMAGE_NAME}:latest
+      - docker tag codepipeline:latest ${IMAGE_NAME}:latest
   post_build:
     commands:
-      - docker push ${IMAGE_NAME}:${CODEBUILD_BUILD_ID}
       - docker push ${IMAGE_NAME}:latest
       - source ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${CODEBUILD_BUILD_ID} ${AWS_PROFILE}
      
