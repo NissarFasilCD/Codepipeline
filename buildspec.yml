@@ -18,6 +18,7 @@ phases:
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       - aws configure set default.region $AWS_REGION
       - aws configure set default.output json
+      - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
