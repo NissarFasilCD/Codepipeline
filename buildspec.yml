@@ -12,7 +12,6 @@ phases:
   pre_build:
     commands:
       - sh source ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_NAME} | sh
-    commands:
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
