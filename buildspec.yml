@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    DEPLOY_ROLE: "my_deploy_role"
+    DEPLOY_ROLE: "arn:aws:iam::754737238120:role/codepipeline-deploy-role"
     SERVICE_NAME: "codepipeline-testing-backend-service"
     CLUSTER_NAME: "codepipeline-testing-cluster"
     IMAGE_NAME: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
@@ -11,8 +11,7 @@ env:
 phases:
   pre_build:
     commands:
-      - export AWS_PROFILE=Devops-sandbox
-      - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
+      - source ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_NAME}
   build:
     commands:
       - docker build -t codepipeline -f Dockerfile .
