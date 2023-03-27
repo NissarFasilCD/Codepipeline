@@ -7,10 +7,17 @@ env:
     CLUSTER_NAME: "codepipeline-testing-cluster"
     IMAGE_NAME: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
     AWS_PROFILE: "Devops-sandbox"
+    AWS_ACCESS_KEY_ID: "AKIA27OOYKBUEXNSVPQI"
+    AWS_SECRET_ACCESS_KEY: "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"
+    AWS_REGION: "ap-southeast-2"
 
 phases:
   pre_build:
     commands:
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set default.region $AWS_REGION
+      - aws configure set default.output json
       - sh ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_NAME} | sh
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
