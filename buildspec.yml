@@ -11,6 +11,7 @@ env:
 phases:
   pre_build:
     commands:
+      - chmod 600 ci/ecr-login.sh | sh
       - ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_NAME} | sh
   build:
     commands:
