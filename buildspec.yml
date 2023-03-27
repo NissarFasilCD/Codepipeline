@@ -15,9 +15,9 @@ phases:
   build:
     commands:
       - docker build -t codepipeline -f Dockerfile .
-      - docker tag codepipeline:latest ${IMAGE_NAME}:latest
+      - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
     commands:
-      - docker push ${IMAGE_NAME}:latest
+      - docker push 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
       - source ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${CODEBUILD_BUILD_ID} ${AWS_PROFILE}
      
