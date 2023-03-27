@@ -24,5 +24,5 @@ phases:
   post_build:
     commands:
       - docker push 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
-      - source ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${CODEBUILD_BUILD_ID} ${AWS_PROFILE}
+      - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME  --timeout 600 --enable-rollback --max-definitions 3
      
