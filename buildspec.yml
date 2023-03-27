@@ -11,6 +11,7 @@ env:
 phases:
   pre_build:
     commands:
+      - export AWS_PROFILE=Devops-sandbox
       - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
   build:
     commands:
