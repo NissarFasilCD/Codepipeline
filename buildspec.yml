@@ -21,8 +21,7 @@ phases:
       - apt-get update
       - apt-get install -y python-pip
       - pip install awscli
-      - curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | \
-        sudo tee /usr/bin/ecs-deploy
+      - pip install ecs-deploy
       - sudo chmod +x /usr/bin/ecs-deploy
 
       - docker build -t codepipeline -f Dockerfile .
