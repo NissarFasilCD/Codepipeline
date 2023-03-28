@@ -21,9 +21,6 @@ phases:
       - apt-get update
       - apt-get install -y python-pip
       - pip install awscli
-      - pip install ecs-deploy
-      - sudo chmod +x /usr/bin/ecs-deploy
-
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
