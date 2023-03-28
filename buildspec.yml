@@ -5,26 +5,16 @@ env:
     DEPLOY_ROLE: "arn:aws:iam::754737238120:role/codepipeline-deploy-role"
     SERVICE_NAME: "codepipeline-testing-backend-service"
     CLUSTER_NAME: "codepipeline-testing-cluster"
-    IMAGE_NAME: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
-    AWS_ACCESS_KEY_ID: "AKIA27OOYKBUEXNSVPQI"
-    AWS_SECRET_ACCESS_KEY: "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"
-    AWS_REGION: "ap-southeast-2"
+    IMAGE_PATH: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
 
 phases:
   pre_build:
     commands:
-      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      - aws configure set default.region $AWS_REGION
-      - aws configure set default.output json
-      - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
-      - apt-get update
-      - apt-get install -y python-pip
-      - pip install awscli
+      - . ci/ecr-login.sh $ROLE $IMAGE_PATH
       - docker build -t codepipeline -f Dockerfile .
       - docker tag codepipeline:latest 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
   post_build:
     commands:
       - docker push 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr:latest
-      - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:$CODEBUILD_BUILD_ID  --timeout 600 --enable-rollback --max-definitions 3 | sh
+
      
