@@ -14,10 +14,11 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      - aws configure set default.region $AWS_REGION
-      - aws configure set default.output json
+      # - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      # - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      # - aws configure set default.region $AWS_REGION
+      # - aws configure set default.output json
+      - $(aws ecr get-login --registry-ids 754737238120 --region ap-southeast-2 --no-include-email)
       - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
