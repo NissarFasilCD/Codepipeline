@@ -6,7 +6,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
-      - REGION=ap-southeast-2
+      - AWS_REGION=ap-southeast-2
       - AWS_ACCESS_KEY_ID=AKIA27OOYKBUEXNSVPQI
       - AWS_SECRET_ACCESS_KEY=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
       - DEPLOY_ROLE=arn:aws:iam::754737238120:role/codepipeline-deploy-role
