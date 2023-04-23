@@ -7,10 +7,17 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - REGION=ap-southeast-2
+      - AWS_ACCESS_KEY_ID=AKIA27OOYKBUEXNSVPQI
+      - AWS_SECRET_ACCESS_KEY=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
       - DEPLOY_ROLE=arn:aws:iam::754737238120:role/codepipeline-deploy-role
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set default.region $AWS_REGION
+      - aws configure set default.output json
+      - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
       - . ci/ecr-login.sh $DEPLOY_ROLE $REPOSITORY_URI 
   build:
     commands:
