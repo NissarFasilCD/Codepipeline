@@ -7,10 +7,11 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - REGION=ap-southeast-2
-      - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
+      - DEPLOY_ROLE=arn:aws:iam::754737238120:role/codepipeline-deploy-role
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - . ci/ecr-login.sh $DEPLOY_ROLE $REPOSITORY_URI 
   build:
     commands:
       - echo Build started on `date`
