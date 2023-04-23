@@ -18,7 +18,7 @@ phases:
       - aws configure set default.region $AWS_REGION
       - aws configure set default.output json
       - aws ecr get-login --no-include-email --region ap-southeast-2 | sh
-      # - . ci/ecr-login.sh $DEPLOY_ROLE $REPOSITORY_URI 
+      # - . ci/ecr-login.sh $DEPLOY_ROLE $REPOSITORY_URI | sh
   build:
     commands:
       - echo Build started on `date`
