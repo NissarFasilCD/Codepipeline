@@ -1,4 +1,5 @@
-IMAGE_PATH=$1
+ROLE_ARN=$1
+IMAGE_PATH=$2
 ROLE_SESSION_NAME=code-pipeline
 # this assumes that the ecr_login has been done before which gives the docker container access to the production server deployment role
 CREDENTIALS=`aws sts assume-role --role-arn $ROLE_ARN --role-session-name $ROLE_SESSION_NAME`

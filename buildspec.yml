@@ -6,6 +6,7 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws --version
+      - DEPLOY_ROLE=arn:aws:iam::754737238120:role/codepipeline-deploy-role
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
@@ -19,7 +20,7 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com | sh
+      - . ci/ecr-login.sh $ROLE $DEPLOY_ROLE $REPOSITORY_URI
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo Writing image definitions file...
