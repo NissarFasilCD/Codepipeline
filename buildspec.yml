@@ -5,28 +5,18 @@ env:
     SERVICE_NAME: "codepipeline-testing-backend-service"
     CLUSTER_NAME: "codepipeline-testing-cluster"
     IMAGE_PATH: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
-    # AWS_ACCESS_KEY_ID: "AKIA27OOYKBUEXNSVPQI"
-    # AWS_SECRET_ACCESS_KEY: "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"
-    # AWS_REGION: "ap-southeast-2"
     ROLE_SESSION_NAME: "code-pipeline"
 
 
 phases:
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
-      - aws --version
-      # - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      # - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      # - aws configure set default.region $AWS_REGION
-      # - aws configure set default.output json
       - CREDENTIALS=`aws sts assume-role --role-arn $ROLE_ARN --role-session-name $ROLE_SESSION_NAME`
       - export AWS_ACCESS_KEY_ID=`echo $CREDENTIALS | jq -r .Credentials.AccessKeyId`
       - export AWS_SECRET_ACCESS_KEY=`echo $CREDENTIALS | jq -r .Credentials.SecretAccessKey`
       - export AWS_SESSION_TOKEN=`echo $CREDENTIALS | jq -r .Credentials.SessionToken`
       - export AWS_DEFAULT_REGION='ap-southeast-2'
       - login_string=`aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin $IMAGE_PATH`;
-      # - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
