@@ -1,7 +1,7 @@
 version: 0.2
 env:
   variables:
-    ROLE_ARN: "arn:aws:iam::754737238120:role/DeployRole"
+    ROLE_ARN: "arn:aws:iam::754737238120:role/codepipeline-deploy-role"
     SERVICE_NAME: "codepipeline-testing-backend-service"
     CLUSTER_NAME: "codepipeline-testing-cluster"
     IMAGE_PATH: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
