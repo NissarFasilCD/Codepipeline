@@ -18,7 +18,7 @@ phases:
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       - aws configure set default.region $AWS_REGION
       - aws configure set default.output json
-      - . ci/ecr-login.sh $ROLE_ARN $IMAGE_PATH
+      - . ci/ecr-login.sh $ROLE_ARN $IMAGE_PATH | sh
       - aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin 754737238120.dkr.ecr.ap-southeast-2.amazonaws.com
       - REPOSITORY_URI=754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
