@@ -11,6 +11,8 @@ env:
 phases:
   pre_build:
     commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
       - CREDENTIALS=`aws sts assume-role --role-arn $ROLE_ARN --role-session-name $ROLE_SESSION_NAME`
       - export AWS_ACCESS_KEY_ID=`echo $CREDENTIALS | jq -r .Credentials.AccessKeyId`
       - export AWS_SECRET_ACCESS_KEY=`echo $CREDENTIALS | jq -r .Credentials.SecretAccessKey`
