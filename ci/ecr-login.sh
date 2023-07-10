@@ -19,3 +19,4 @@ echo $AWS_SESSION_TOKEN
 # now do the login
 # eval sudo su -
 login_string=`aws ecr get-login-password --region ap-southeast-2 | docker login --username AWS --password-stdin $IMAGE_PATH`;
+aws ecr get-login-password | docker login --username AWS --password-stdin "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
