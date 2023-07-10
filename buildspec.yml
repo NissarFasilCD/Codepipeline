@@ -26,6 +26,6 @@ phases:
   post_build:
     commands:
       - echo deploy into ecs
-      - ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${env.BUILD_ID}
+      - ci/assume_role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
       - docker rmi -f jcu-backend
       
