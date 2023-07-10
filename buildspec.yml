@@ -5,28 +5,25 @@ env:
     SERVICE_NAME: "jcu-stg"
     CLUSTER_NAME: "jcu-stg-cluster"
     IMAGE_PATH: "785773943475.dkr.ecr.ap-southeast-2.amazonaws.com/jcu-stg-backend-ecr"
-    ROLE_SESSION_NAME: "code-pipeline"
-
 
 phases:
   pre_build:
     commands:
       - echo Logging into Amazon ECR...
       - aws --version
+      - ci/ecr-login.sh ${ROLE_ARN} ${AWS_PROFILE} ${IMAGE_PATH}
       - echo Building the Docker image...
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-      - ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_PATH} 
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-      
   build:
     commands:
       - echo Building the Docker image...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      
-   post_build:
+  post_build:
     commands:
       - echo deploy into ecs
-      - source ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${env.BUILD_ID} ${AWS_PROFILE}
+      - aws assume-role --role-arn $ROLE_ARN --role-session-name $CODE_PIPELINE_SESSION_NAME
+      - # deploy the Docker image to ECS
