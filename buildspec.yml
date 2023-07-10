@@ -1,10 +1,10 @@
 version: 0.2
 env:
   variables:
-    ROLE_ARN: "arn:aws:iam::754737238120:role/codepipeline-deploy-role"
-    SERVICE_NAME: "codepipeline-testing-backend-service"
-    CLUSTER_NAME: "codepipeline-testing-cluster"
-    IMAGE_PATH: "754737238120.dkr.ecr.ap-southeast-2.amazonaws.com/codepipeline-testing-backend-ecr"
+    ROLE_ARN: "arn:aws:iam::785773943475:role/codepipeline-deploy-role"
+    SERVICE_NAME: "jcu-stg"
+    CLUSTER_NAME: "jcu-stg-cluster"
+    IMAGE_PATH: "785773943475.dkr.ecr.ap-southeast-2.amazonaws.com/jcu-stg-backend-ecr"
     ROLE_SESSION_NAME: "code-pipeline"
 
 
