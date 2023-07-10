@@ -11,7 +11,7 @@ phases:
     commands:
       - echo Logging into Amazon ECR...
       - aws --version
-      - ci/ecr-login.sh $ROLE_ARN $AWS_PROFILE $IMAGE_PATH
+      - bash ci/ecr-login.sh $ROLE_ARN $AWS_PROFILE $IMAGE_PATH
       - DB_HOST=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .host)
       - DB_USERNAME=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .username)
       - DB_DATABASE=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .database)
@@ -30,6 +30,6 @@ phases:
   post_build:
     commands:
       - echo deploy into ecs
-      - ci/assume_role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
+      - bash ci/assume_role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
       - docker rmi -f jcu-backend
       
