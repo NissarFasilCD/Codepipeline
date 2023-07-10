@@ -16,7 +16,7 @@ phases:
       - echo Building the Docker image...
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-      - source ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_PATH} 
+      - ci/ecr-login.sh ${DEPLOY_ROLE} ${AWS_PROFILE} ${IMAGE_PATH} 
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
       
