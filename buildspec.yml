@@ -4,26 +4,28 @@ env:
     ROLE_ARN: "arn:aws:iam::785773943475:role/codepipeline-deploy-role"
     SERVICE_NAME: "jcu-stg"
     CLUSTER_NAME: "jcu-stg-cluster"
-    IMAGE_PATH: "785773943475.dkr.ecr.ap-southeast-2.amazonaws.com/jcu-stg-backend-ecr"
+    IMAGE_NAME: "785773943475.dkr.ecr.ap-southeast-2.amazonaws.com/jcu-stg-backend-ecr"
 
 phases:
   pre_build:
     commands:
       - echo Logging into Amazon ECR...
       - aws --version
-      - ci/ecr-login.sh ${ROLE_ARN} ${AWS_PROFILE} ${IMAGE_PATH}
+      - ci/ecr-login.sh $ROLE_ARN $AWS_PROFILE $IMAGE_PATH
       - echo Building the Docker image...
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
-      - docker build -t $REPOSITORY_URI:latest .
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker build --no-cache -t jcu-backend -f Dockerfile .
+      - docker tag jcu-backend:latest $IMAGE_NAME:$IMAGE_TAG
+      - docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
   build:
     commands:
       - echo Building the Docker image...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push $IMAGE_NAME:$IMAGE_TAG
+      - docker push $IMAGE_NAME:latest
   post_build:
     commands:
       - echo deploy into ecs
       - ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${env.BUILD_ID}
+      - docker rmi -f jcu-backend
       
