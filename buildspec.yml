@@ -25,5 +25,5 @@ phases:
   post_build:
     commands:
       - echo deploy into ecs
-      - aws assume-role --role-arn $ROLE_ARN --role-session-name $CODE_PIPELINE_SESSION_NAME
-      - # deploy the Docker image to ECS
+      - ci/assume_role.sh ${DEPLOY_ROLE} ${SERVICE_NAME} ${CLUSTER_NAME} ${IMAGE_NAME} ${env.BUILD_ID}
+      
