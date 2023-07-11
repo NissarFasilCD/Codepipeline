@@ -31,10 +31,10 @@ phases:
       - echo Building the Docker image...
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - docker push $IMAGE_NAME:latest
-      # - echo Running psql command...
-      # - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
+      - echo Running psql command...
+      - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
   post_build:
     commands:
       - echo deploy into ecs
-      - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
+      # - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
       - docker rmi -f jcu-backend
