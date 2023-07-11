@@ -11,7 +11,7 @@ phases:
     commands:
       - echo Installing psql, AWS CLI, and ecs-deploy...
       - apt-get update && apt-get install -y postgresql-client awscli
-      - curl -Lo /usr/local/bin/ecs-deploy https://github.com/silinternational/ecs-deploy/releases/download/v3.7.0/ecs-deploy-linux-amd64 && chmod +x /usr/local/bin/ecs-deploy
+      - curl -Lo /usr/local/bin/ecs-deploy https://github.com/silinternational/ecs-deploy/releases/latest/download/ecs-deploy-linux-amd64 && chmod +x /usr/local/bin/ecs-deploy
       - echo Logging into Amazon ECR...
       - aws --version
       - bash ci/ecr-login.sh $DEPLOY_ROLE $AWS_PROFILE $IMAGE_PATH
