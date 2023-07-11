@@ -32,7 +32,7 @@ phases:
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - docker push $IMAGE_NAME:latest
       - echo Running psql command...
-      - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
+      - set PGPASSWORD=DB_PASSWORD && psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
       # - telnet jcu-stg-db.ce3uje70dcqw.ap-southeast-2.rds.amazonaws.com 5432
   post_build:
     commands:
