@@ -9,6 +9,8 @@ env:
 phases:
   pre_build:
     commands:
+      - echo Installing psql and AWS CLI...
+      - apt-get update && apt-get install -y postgresql-client awscli
       - echo Logging into Amazon ECR...
       - aws --version
       - bash ci/ecr-login.sh $DEPLOY_ROLE $AWS_PROFILE $IMAGE_PATH
