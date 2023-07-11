@@ -20,6 +20,8 @@ phases:
       - echo Building the Docker image...
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+      - echo Running psql command...
+      - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
       - docker build --no-cache -t jcu-backend -f Dockerfile .
       - docker tag jcu-backend:latest $IMAGE_NAME:$IMAGE_TAG
       - docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest
