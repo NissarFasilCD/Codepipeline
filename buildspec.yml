@@ -11,7 +11,7 @@ phases:
     commands:
       - echo Installing psql, AWS CLI, and ecs-deploy...
       - apt-get update && apt-get install -y postgresql-client awscli
-      - curl -Lo /usr/local/bin/ecs-deploy https://github.com/silinternational/ecs-deploy/releases/latest/download/ecs-deploy-linux-amd64 && chmod +x /usr/local/bin/ecs-deploy
+      - curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy sudo chmod +x /usr/bin/ecs-deploy
       - echo Logging into Amazon ECR...
       - aws --version
       - bash ci/ecr-login.sh $DEPLOY_ROLE $AWS_PROFILE $IMAGE_PATH
@@ -31,8 +31,8 @@ phases:
       - echo Building the Docker image...
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - docker push $IMAGE_NAME:latest
-      - echo Running psql command...
-      - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
+      # - echo Running psql command...
+      # - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
   post_build:
     commands:
       - echo deploy into ecs
