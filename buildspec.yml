@@ -31,7 +31,7 @@ phases:
   post_build:
     commands:
       - echo deploy into ecs
-      - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:$IMAGE_NAME  --timeout 600 --enable-rollback --max-definitions 2
-      # - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_NAME
+      # - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:$IMAGE_NAME  --timeout 600 --enable-rollback --max-definitions 2
+      - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_NAME
       - docker rmi -f jcu-backend
       
