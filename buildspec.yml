@@ -9,8 +9,9 @@ env:
 phases:
   pre_build:
     commands:
-      - echo Installing psql and AWS CLI...
+      - echo Installing psql, AWS CLI, and ecs-deploy...
       - apt-get update && apt-get install -y postgresql-client awscli
+      - curl -Lo /usr/local/bin/ecs-deploy https://github.com/silinternational/ecs-deploy/releases/download/v3.7.0/ecs-deploy-linux-amd64 && chmod +x /usr/local/bin/ecs-deploy
       - echo Logging into Amazon ECR...
       - aws --version
       - bash ci/ecr-login.sh $DEPLOY_ROLE $AWS_PROFILE $IMAGE_PATH
@@ -31,11 +32,9 @@ phases:
       - docker push $IMAGE_NAME:$IMAGE_TAG
       - docker push $IMAGE_NAME:latest
       - echo Running psql command...
-      - psql -h $DB_HOST -p $DB_PASSWORD -d $DB_DATABASE -U $DB_USERNAME $DB_PORT
+      - psql -h $DB_HOST -d $DB_DATABASE -U $DB_USERNAME -p $DB_PORT -W $DB_PASSWORD
   post_build:
     commands:
       - echo deploy into ecs
-      # - ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:$IMAGE_NAME  --timeout 600 --enable-rollback --max-definitions 2
-      - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_NAME
+      - bash ci/assume-role.sh $DEPLOY_ROLE $SERVICE_NAME $CLUSTER_NAME $IMAGE_NAME $IMAGE_TAG
       - docker rmi -f jcu-backend
-      
