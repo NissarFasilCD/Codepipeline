@@ -16,6 +16,7 @@ phases:
       - DB_USERNAME=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .username)
       - DB_DATABASE=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .database)
       - DB_PASSWORD=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .password)
+      - DB_PORT=$(aws secretsmanager get-secret-value --secret-id jcu-stg-secret | jq --raw-output '.SecretString' | jq -r .port)
       - echo Building the Docker image...
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
